@@ -1,0 +1,4 @@
+How I Made Spoon
+
+<p>Spoon is a tiny and bashful (see what I did there) static site generator in under 100 lines, written in the bash shell scripting language. It is very lax on features, but allows me to write posts and build a fully static site through SSH in a terminal. It doesn't support tags, comments, static pages, any kind of in-browser admin system, uploading images (do that yourself with cp or something), markdown or any other markup language (except html, which can sometimes be a pain), or pretty much anything else not here. It *does* support simple blog posts, single-file templating, a small selection of template tags, honest users, cli text editors, and your marriage.<p>
+<p>I've been interested in static site generators for a while. I had a look at @cfenollosa's bashblog script on github which was decent, but for me, 1000+ lines supporting disqus, analytics and a bunch of other things I didn't want seemed way too large. So I started work on Spoon.<p>
