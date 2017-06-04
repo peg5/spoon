@@ -6,11 +6,11 @@
 name="Spoon"
 version="0.1 alpha"
 
-title=A Spoon of Vanilla
-subtitle=The default Spoon setup
-author=Spoon
-url="http://example.com/
-license="copyleft
+title="A Spoon of Vanilla"
+subtitle="The default Spoon setup"
+author="Spoon"
+url="http://example.com/"
+license="copyleft"
 
 # create files
 write() {
@@ -51,7 +51,7 @@ build() {
 	echo Building posts:
 	for filename in .posts/*.txt; do
 		pagefile=$(basename $filename .txt)
-		echo "    Building post $pagefile..."
+		echo "    Building post $filename..."
 		
 		template=$(<assets/template.html)
 		page=${template//"{TITLE}"/$title}
@@ -59,11 +59,11 @@ build() {
 		page=${page//"{AUTHOR}"/$author}
 		page=${page//"{URL}"/$url}
 		page=${page//"{LICENSE}"/$license}
-		page=${page//"{PAGE_TITLE}"/$(head -n 1 .posts/$pagefile.txt)}
-		page=${page//"{PAGE_DATE}"/$(echo $pagefile | cut -d - -f 1-3)}
-		page=${template//"{PAGE_URL}"/$(basename $filename .txt | cut -d - -f 4-).html}
-		page=${page//"{CONTENT}"/$(tail -n $(($(wc -l < .posts/$pagefile.txt)-1)) .posts/$pagefile.txt)}
-		echo $page > $(echo $pagefile | cut -d - -f 4-).html
+		page=${page//"{PAGE_TITLE}"/$(head -n 1 $filename)}
+		page=${page//"{PAGE_DATE}"/$(echo $(basename $filename .txt) | cut -d - -f 1-3)}
+		page=${page//"{PAGE_URL}"/$(basename $filename .txt | cut -d - -f 4-).html}
+		page=${page//"{CONTENT}"/$(tail -n $(($(wc -l < $filename)-1)) $filename)}
+		echo $page > $(echo $(basename $filename .txt) | cut -d - -f 4-).html
 		
 		# write each post to a placeholder index.
 		echo "<li>$(echo $pagefile | cut -d - -f 1-3)&nbsp;<a href=\"$(basename $filename .txt | cut -d - -f 4-).html\">$(head -n 1 .posts/$pagefile.txt)</a></li>" >> .index.txt
@@ -78,7 +78,7 @@ build() {
 	page=${page//"{LICENSE}"/$license}
 	page=${page//"{PAGE_TITLE}"/"Home"}
 	page=${page//"{PAGE_DATE}"/generated $(date -I)}
-	page=${template//"{PAGE_URL}"/$url}
+	page=${page//"{PAGE_URL}"/$url}
 	page=${page//"{CONTENT}"/$(tac .index.txt)}
 	echo $page > index.html
 	rm .index.txt
