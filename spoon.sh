@@ -79,7 +79,7 @@ build() {
 	page=${page//"{PAGE_DATE}"/generated $(date -I)}
 	page=${page//"{PAGE_URL}"/$url}
 	page=${page//"{CONTENT}"/$(tac .index.txt)}
-	echo $page > index.html
+	echo "$page" > index.html
 	rm .index.txt
 	echo Build complete.
 	exit
