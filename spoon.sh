@@ -1,11 +1,9 @@
 #!/usr/bin/env bash
-
 # Spoon - a tiny and bashful static site generator.
 # Love from Noah xx
 
 name="Spoon"
 version="0.1 alpha"
-
 title="A Spoon of Vanilla"
 subtitle="The default Spoon setup"
 author="Spoon"
@@ -36,7 +34,6 @@ write() {
 	build		
 	exit
 }
-
 edit(){
 	[[ -z $2 ]] && echo Please specify a post to edit. && exit
 	[[ -z $EDITOR ]] && echo "\$EDITOR not exported in .bashrc; defaulting to vi." && EDITOR=vi
@@ -45,10 +42,11 @@ edit(){
 	
 	exit
 }
-
 # build site
 build() {
 	echo Building posts:
+	# hacky mechanism for post list, reversed cuz .index.txt gets reversed
+	echo "</ul>" >> .index.txt
 	for filename in .posts/*.txt; do
 		pagefile=$(basename $filename .txt)
 		echo "    Building post $filename..."
@@ -63,13 +61,14 @@ build() {
 		page=${page//"{PAGE_DATE}"/$(echo $(basename $filename .txt) | cut -d - -f 1-3)}
 		page=${page//"{PAGE_URL}"/$(basename $filename .txt | cut -d - -f 4-).html}
 		page=${page//"{CONTENT}"/$(tail -n $(($(wc -l < $filename)-1)) $filename)}
-		echo $page > $(echo $(basename $filename .txt) | cut -d - -f 4-).html
+		echo "$page" > $(echo $(basename $filename .txt) | cut -d - -f 4-).html
 		
 		# write each post to a placeholder index.
 		echo "<li>$(echo $pagefile | cut -d - -f 1-3)&nbsp;<a href=\"$(basename $filename .txt | cut -d - -f 4-).html\">$(head -n 1 .posts/$pagefile.txt)</a></li>" >> .index.txt
 	done
 	echo Building index...
-	
+	echo "<ul>" >> .index.txt
+
 	template=$(<assets/template.html)
 	page=${template//"{TITLE}"/$title}
 	page=${page//"{SUBTITLE}"/$subtitle}
